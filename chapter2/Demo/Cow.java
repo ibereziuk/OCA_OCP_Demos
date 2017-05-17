@@ -35,9 +35,43 @@ public class Cow
 		}
 	}
 	
-	public enum Color {
+	
+	public static class CowBuilder
+	{
+		private int age;
+		private String name;
+		private Color color;
+		
+		public CowBuilder withAge(int age)
+		{
+			this.age = age;
+			return this;
+		}
+		
+		public CowBuilder withColor(Color color)
+		{
+			this.color = color;
+			return this;			
+		}			
+		
+		public CowBuilder withName(String name)
+		{
+			this.name = name;
+			return this;
+		}
+		
+		public Cow build()
+		{
+			return new Cow(age, name, color);
+		}
+	}
+	
+	
+	public enum Color 
+	{
 		BROWN, WHITE, MIXED
 	}
+	
 	
 	private int age;
 	private String name;

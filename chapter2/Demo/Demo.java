@@ -24,7 +24,8 @@ public class Demo
 		final int MIN_AGE = 0;
 		final int MAX_AGE = 6;
 		
-		String[] namesPool = {
+		String[] namesPool = 
+		{
 			"Bessie", "Clarabelle", "Betty Sue",
 			"Emma", "Henrietta", "Ella",
 			"Penelope", "Nettie", "Anna",
@@ -42,12 +43,19 @@ public class Demo
 		String name;
 		Cow.Color color;
 		
+		Cow.CowBuilder builder = new Cow.CowBuilder();
+		
 		for (int i = 0; i < nCows; i++)
 		{			
 			age = rand.nextInt(MAX_AGE + 1);
 			name = namesPool[rand.nextInt(namesPool.length)];
 			color = colors[rand.nextInt(colors.length)];
-			herdCow.add(new Cow(age, name, color));
+			
+			builder.withAge(age)
+				.withName(name)
+				.withColor(color);
+			
+			herdCow.add(builder.build());
 		}
 		
 		return herdCow;

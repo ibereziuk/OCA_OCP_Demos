@@ -39,8 +39,6 @@ public class Cow
 		BROWN, WHITE, MIXED
 	}
 	
-	private static MilkCalculator milkCalc = MilkCalculator.getInstance();
-	
 	private int age;
 	private String name;
 	private float milkPerDay;
@@ -52,7 +50,7 @@ public class Cow
 		this.age = age;
 		this.name = name;
 		this.color = c;
-		this.milkPerDay = milkCalc.calculate(age);
+		this.milkPerDay = MilkCalculator.getInstance().calculate(age);
 	}
 	
 	

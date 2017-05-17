@@ -4,9 +4,21 @@ public class Cow
 {
 	private static class MilkCalculator
 	{
-		public static final int MIN_MILK_PER_DAY = 14;
+		private static final int MIN_MILK_PER_DAY = 14;
 		private static final Random rand = new Random();
 		private static final int MILK_AGE_TRESHOLD = 0;
+	
+		private static MilkCalculator instance;
+		private MilkCalculator(){}
+	
+		public static MilkCalculator getInstance()
+		{
+			if(instance == null)
+			{
+				instance = new MilkCalculator();
+			}
+			return instance;
+		}
 	
 		public static float calculate(int age)
 		{
@@ -27,7 +39,7 @@ public class Cow
 		BROWN, WHITE, MIXED
 	}
 	
-	private static MilkCalculator milkCalc = new MilkCalculator();
+	private static MilkCalculator milkCalc = MilkCalculator.getInstance();
 	
 	private int age;
 	private String name;

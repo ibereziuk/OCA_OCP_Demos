@@ -9,7 +9,7 @@ public class Cow {
 		private static MilkCalculator instance;
 		private MilkCalculator(){}
 	
-		public static MilkCalculator getInstance() {
+		public static synchronized MilkCalculator getInstance() {
 			if(instance == null) {
 				instance = new MilkCalculator();
 			}
@@ -53,6 +53,45 @@ public class Cow {
 		public Cow build() {
 			return new Cow(age, name, color);
 		}
+	}
+	
+	
+	private static ArrayList<Cow> createCowHerd(int nCows) {
+		final int MIN_AGE = 0;
+		final int MAX_AGE = 6;
+		
+		String[] namesPool = {
+			"Bessie", "Clarabelle", "Betty Sue",
+			"Emma", "Henrietta", "Ella",
+			"Penelope", "Nettie", "Anna",
+			"Bella", "Annabelle", "Dorothy",
+			"Molly", "Gertie", "Annie"
+		};
+		
+		Random rand = new Random();
+		Cow.Color[] colors = Cow.Color.values();
+
+
+		ArrayList<Cow> herdCow = new ArrayList<>();
+		
+		int age;
+		String name;
+		Cow.Color color;
+		Cow.CowBuilder cb = new Cow.CowBuilder();
+		
+		for (int i = 0; i < nCows; i++) {
+			age = rand.nextInt(MAX_AGE + 1);
+			name = namesPool[rand.nextInt(namesPool.length)];
+			color = colors[rand.nextInt(colors.length)];
+			
+			cb.withAge(age)
+				.withName(name)
+				.withColor(color);
+			
+			herdCow.add(cb.build());
+		}
+		
+		return herdCow;
 	}
 	
 	

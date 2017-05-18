@@ -3,8 +3,7 @@ import java.util.function.*;
 
 public class Demo {
 	public static void main(String[] args) {
-		int nCows = args.length == 0 ? 10 : Integer.parseInt(args[0]);
-		
+		int nCows = getNcows(args);
 		ArrayList<Cow> herdCow = Cow.createCowHerd(nCows);
 	
 		// print(herdCow);
@@ -16,6 +15,23 @@ public class Demo {
 		displayResults("Hash", nHashCollisions, nCows);
 	}
 	
+	
+	static int getNcows(String[] args) {
+		int amount = 10;	// default amount
+		try {
+			if (args.length != 0) {
+				amount = Integer.parseInt(args[0]);
+				if (amount < 1) {
+					throw new NumberFormatException("Negative doesn't work here");
+				}
+			}
+		}
+		catch(NumberFormatException ex) {
+			System.out.println("Please enter positive integer number");
+			System.exit(13);
+		}
+		return amount;
+	}
 	
 	
 	private static void print(ArrayList<Cow> herd) {
@@ -47,7 +63,8 @@ public class Demo {
 	
 	static void displayResults(String collisionType, int nCollisions, int nTotal) {
 		System.out.println("\n\t" + collisionType
-			+ String.format(" collision rate: %d out of %d = ", nCollisions, nTotal) 
-			+ (100 * (double)nCollisions / nTotal) + "%");
+			+ String.format(" collision rate: %d out of %d = %.3f", 
+				nCollisions, nTotal, (100 * (double)nCollisions / nTotal)) 
+			+ "%");
 	}
 }

@@ -1,9 +1,7 @@
 import java.util.*;
 
-public class Cow
-{
-	private static class MilkCalculator
-	{
+public class Cow {
+	private static class MilkCalculator {
 		private static final int MIN_MILK_PER_DAY = 14;
 		private static final Random rand = new Random();
 		private static final int MILK_AGE_TRESHOLD = 0;
@@ -11,20 +9,16 @@ public class Cow
 		private static MilkCalculator instance;
 		private MilkCalculator(){}
 	
-		public static MilkCalculator getInstance()
-		{
-			if(instance == null)
-			{
+		public static MilkCalculator getInstance() {
+			if(instance == null) {
 				instance = new MilkCalculator();
 			}
 			return instance;
 		}
 	
-		public static float calculate(int age)
-		{
+		public static float calculate(int age) {
 			double amount = 0;
-			if (age >= MILK_AGE_TRESHOLD)
-			{
+			if (age >= MILK_AGE_TRESHOLD) {
 				amount = 14 + 0.1 * (age - 1) - 0.5 * Math.pow(age - 4, 2);			
 				final double MAX_DEVIATION = 0.20;
 				Random r = new Random();
@@ -36,39 +30,33 @@ public class Cow
 	}
 	
 	
-	public static class CowBuilder
-	{
+	public static class CowBuilder {
 		private int age;
 		private String name;
 		private Color color;
 		
-		public CowBuilder withAge(int age)
-		{
+		public CowBuilder withAge(int age) {
 			this.age = age;
 			return this;
 		}
 		
-		public CowBuilder withColor(Color color)
-		{
+		public CowBuilder withColor(Color color) {
 			this.color = color;
 			return this;			
 		}			
 		
-		public CowBuilder withName(String name)
-		{
+		public CowBuilder withName(String name) {
 			this.name = name;
 			return this;
 		}
 		
-		public Cow build()
-		{
+		public Cow build() {
 			return new Cow(age, name, color);
 		}
 	}
 	
 	
-	public enum Color 
-	{
+	public enum Color {
 		BROWN, WHITE, MIXED
 	}
 	
@@ -79,8 +67,7 @@ public class Cow
 	private Color color;
 	
 	
-	public Cow(int age, String name, Color c)
-	{
+	public Cow(int age, String name, Color c) {
 		this.age = age;
 		this.name = name;
 		this.color = c;
@@ -89,8 +76,7 @@ public class Cow
 	
 	
 	@Override
-	public int hashCode()
-	{
+	public int hashCode() {
 		int hash = this.toString().hashCode();
 		hash ^= Float.hashCode(milkPerDay);
 		return hash;
@@ -98,10 +84,8 @@ public class Cow
 	
 	
 	@Override
-	public boolean equals(Object obj)
-	{
-		if (!(obj instanceof Cow))
-		{
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Cow)) {
 			return false;
 		}
 		Cow cow = (Cow)obj;
@@ -112,17 +96,17 @@ public class Cow
 			&& this.color == cow.color;
 	}
 	
+	
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Cow ")
 			.append(name)
 			.append(", ");
 		int nameSpace = 17;
 		int rest = nameSpace - builder.length();
-		for(int i = 1; i < rest; i++)
-		{
+		
+		for(int i = 1; i < rest; i++) {
 			 builder.append(" ");
 		}
 		

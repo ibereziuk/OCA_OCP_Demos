@@ -56,7 +56,7 @@ public class Cow {
 	}
 	
 	
-	private static ArrayList<Cow> createCowHerd(int nCows) {
+	public static ArrayList<Cow> createCowHerd(int nCows) {
 		final int MIN_AGE = 0;
 		final int MAX_AGE = 6;
 		

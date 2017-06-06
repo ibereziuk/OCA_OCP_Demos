@@ -10,6 +10,15 @@ public class Demo {
 	static void simulateIsland() {
 		int nCats = 20;
 		int nSheeps = 25;
+public class Demo 
+{
+	public static void main(String[] args) {
+		simulateIsland();	
+	}
+	
+	static void simulateIsland() {
+		int nCats = 10;
+		int nSheeps = 20;
 		Stream<Animal> animals = settleIsland(nCats, nSheeps);
 
 		//// volcano BOOM here!

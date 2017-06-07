@@ -1,15 +1,7 @@
 import java.util.function.*; // import functional interfaces
 import java.util.*;
 import java.util.stream.*;
-
-public class Demo {
-	public static void main(String[] args) {
-		simulateIsland();
-	}
-	
-	static void simulateIsland() {
-		int nCats = 20;
-		int nSheeps = 25;
+		
 public class Demo 
 {
 	public static void main(String[] args) {

@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.stream.*;
 
 public class Customer {
 	List<Item> basket;
@@ -16,5 +17,15 @@ public class Customer {
 	public Bill settleUp() {
 		// implement
 		return new Bill(basket, card.getLocale());
+	}
+	
+	public void pickItems(String[] productNames, int nItemsToBuy) {
+		Random rand = new Random();
+		
+		Stream
+			.generate(() -> rand.nextInt(productNames.length))
+			.limit(nItemsToBuy)
+			.map(i -> new Descrete(productNames[i], 1))
+			.forEach(item -> this.pickItem(item));
 	}
 }

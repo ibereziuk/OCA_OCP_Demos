@@ -4,6 +4,7 @@ import java.time.*;
 import java.time.format.*;
 
 public class Bill {
+	static int width = 60;
 	List<Item> itemList;
 	Locale locale;
 	
@@ -12,31 +13,41 @@ public class Bill {
 		locale = _locale;
 	}
 	
-	
-	public void print() {
-		int width = 60;
-		String prefix = "\t\t\tWelcome to the shop\n\t";
+	@Override
+	public String toString() {
+		ResourceBundle greetingsBundle = ResourceBundle.getBundle("terms", locale);
+		String greetings = greetingsBundle.getString("greetings");
+		String prefix = "\t\t\t" + greetings + "\n\t";
 		
-		double moneyToPay = itemList.stream()
-			.mapToDouble(Item::getPrice)
-			.sum();
-		String suffix =	"\n\n\tin total:...... $" + moneyToPay;
+		double moneyToPay = inTotal();
+		String suffix =	"\n\n\t" + composeAny("in total", "$" + moneyToPay, width, ".");
+		
 		StringJoiner joiner = new StringJoiner("\n\t", prefix, suffix);
 		
 		itemList.stream()
+			.sorted((it1,it2) -> it1.getName().compareTo(it2.getName()))
 			.map(item -> composeItemEntry(item, width))
 			.forEach(joiner::add);
 			
 		ZonedDateTime time = ZonedDateTime.now();
-		String bill = joiner.toString()
-			+ "\n\ttime:  " + time.format(DateTimeFormatter.ISO_ZONED_DATE_TIME);
-		System.out.println(bill);
+
+		String returnValue = joiner.toString()
+			+ "\n\n\ttime:  " 
+			+ time.format(DateTimeFormatter.ISO_ZONED_DATE_TIME);
+			
+		return returnValue;
 	}
 	
+	double inTotal() {
+		return itemList.stream()
+			.mapToDouble(Item::getPrice)
+			.sum();
+	}
 	
-	static String composeItemEntry(Item item, int width) {
+	String composeItemEntry(Item item, int width) {
 		String price = Double.toString(item.getPrice());
-		String name = item.getName();
+		ResourceBundle itemNames = ResourceBundle.getBundle("itemnames", locale);
+		String name = itemNames.getString(item.getName());
 		return composeAny(name, price, width, ".");
 	}
 	

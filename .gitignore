@@ -25,4 +25,8 @@
 hs_err_pid*
 
 # non-Demo subdirectories
+build/
 chapter3/Play/
+chapter5_DateTime/PlayDateTime/
+chapter5_DateTime/Localization/
+chapter6_ExceptionsAssertions/

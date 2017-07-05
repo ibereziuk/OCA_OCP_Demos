@@ -13,7 +13,7 @@ public class XmlToPlainParser {
     private Map<String, String> stringResourceMap = new HashMap<>();
     private String currentFileName = null;
 
-    public void parse(String filename)
+    public void parse(String filename, PrintStream logStream)
     {
         try {
             currentFileName = filename;
@@ -29,13 +29,13 @@ public class XmlToPlainParser {
 
                 switch (node.getNodeName()) {
                     case "string":
-                        processNodeString(node);
+                        processNodeString(node, logStream);
                         break;
                     case "plurals":
-                        processNodePlural(node);
+                        processNodePlural(node, logStream);
                         break;
                     default:
-                        System.out.println("WARNIGN!!! Unknown node type " + node.getNodeName());
+                        logStream.println("WARNIGN!!! Unknown node type " + node.getNodeName());
                         break;
                 }
             }
@@ -88,14 +88,14 @@ public class XmlToPlainParser {
         return sbuf.toString();
     }
 
-    private void processNodeString(Node node) {
+    private void processNodeString(Node node, PrintStream logStream) {
         String leftStr = node.getAttributes().getNamedItem("name").getNodeValue();
         String rightStr = node.getFirstChild().getNodeValue();
 
-        store(leftStr, rightStr);
+        store(leftStr, rightStr, logStream);
     }
 
-    private void processNodePlural(Node node) {
+    private void processNodePlural(Node node, PrintStream logStream) {
         Node attribute = node.getAttributes().getNamedItem("name");
         String leftStrBase = attribute.getNodeValue();
 
@@ -107,22 +107,22 @@ public class XmlToPlainParser {
             String leftStr = leftStrBase + "_" + leftStrSuffix;
             String rightStr = child.getFirstChild().getNodeValue();
 
-            store(leftStr, rightStr);
+            store(leftStr, rightStr, logStream);
         }
     }
 
 
-    private void store(String leftStr, String rightStr) {
+    private void store(String leftStr, String rightStr, PrintStream logStream) {
         boolean isDuplicate = null != stringResourceMap.putIfAbsent(leftStr, rightStr);
-        if (false && isDuplicate) {
+        if (isDuplicate) {
             // entry with name leftStr appeared earlier. Ignore new value.
             //  Write warning with some usefull info to console.
             String oldRightStr = stringResourceMap.get(leftStr);
             if (oldRightStr.equals(rightStr)) {
-                System.out.println("!Duplication for entry: \"" + leftStr
+                logStream.println("!Duplication for entry: \"" + leftStr
                         + "\"\t in file " + currentFileName);
             } else {
-                System.out.println("WARNING! Different values for entry: \""
+                logStream.println("WARNING! Different values for entry: \""
                         + leftStr + "\"\n"
                         + "\t version one: \"" + oldRightStr + "\"\n"
                         + "\t version two: \"" + rightStr + "\"\t location: " + currentFileName);

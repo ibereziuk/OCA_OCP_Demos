@@ -1,10 +1,12 @@
 package parser;
 
+import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Merger {
-    public static Map<String, String> mergeLog(Map<String, Map<String,String>> parseResults) {
+    public static Map<String, String> mergeLog(Map<String, Map<String,String>> parseResults,
+                                               PrintStream logStream) {
         Map<String, String> retVal = new HashMap<>();
         if (parseResults.size() > 0) {
             String[] inputFileNames = parseResults.keySet().toArray(new String[0]);
@@ -21,7 +23,7 @@ public class Merger {
                     boolean isDuplicate = null != retVal.putIfAbsent(key, value);
                     if (isDuplicate) {
                         String oldValue = retVal.get(key);
-                        report(key, oldValue, value, fileName);
+                        report(key, oldValue, value, fileName, logStream);
                     }
                 }
             }
@@ -34,13 +36,13 @@ public class Merger {
     private static void report(String key,
                                String oldValue,
                                String newValue,
-                               String fileName)
-    {
+                               String fileName,
+                               PrintStream logStream) {
         if (oldValue.equals(newValue)) {
-            System.out.println("!Duplication for entry: \"" + key
+            logStream.println("!Duplication for entry: \"" + key
                     + "\"\t in file " + fileName);
         } else {
-            System.out.println("WARNING! Different values for entry: \""
+            logStream.println("WARNING! Different values for entry: \""
                     + key + "\"\n"
                     + "\t version one: \"" + oldValue + "\"\n"
                     + "\t version two: \"" + newValue + "\"\t location: " + fileName);

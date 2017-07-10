@@ -2,21 +2,16 @@ package parser;
 
 import java.io.*;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.xml.parsers.*;
 import org.xml.sax.*;
 import org.w3c.dom.*;
 
 public class XmlToPlainParserSync {
-    //    private Map<String, String> stringResourceMap = new HashMap<>();
-    private String currentFileName = null;
 
     public Map<String, String> parse(String filename) {
         Map<String, String> resources = new HashMap<>();
         try {
-            currentFileName = filename;
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 
             DocumentBuilder db = dbf.newDocumentBuilder();
@@ -48,54 +43,11 @@ public class XmlToPlainParserSync {
     }
 
 
-//    public void print(PrintStream out) {
-//        stringResourceMap.forEach((k,v) -> {
-//            out.println(k + " = " + adaptText(v));
-//        });
-//        // replaceAll()
-//    }
-
-
-//    public void reset() {
-//        stringResourceMap.clear();
-//        currentFileName = null;
-//    }
-
-
-    private String adaptText(String strIn) {
-        String regex1 = "%d";
-        String regex2 = "%(\\d)\\$\\w";
-        if (!strIn.matches(".*(" + regex1 + "|" + regex2 + ").*")) {
-            return strIn;
-        }
-        // here I suppose that special combination "%d" and "%\d$\w" appear only
-        // separately (in different records). And they are!
-
-        StringBuffer sbuf = new StringBuffer();
-        if (strIn.matches(".*" + regex1 + ".*")) {
-            Matcher mInput = Pattern.compile(regex1, Pattern.DOTALL).matcher(strIn);
-            for (int i = 0; mInput.find(); i++) {
-                mInput.appendReplacement(sbuf, "{" + i + "}");
-            }
-            mInput.appendTail(sbuf);
-        }
-        else if (strIn.matches(".*" + regex2 + ".*")) {
-            Matcher mInput = Pattern.compile(regex2, Pattern.DOTALL).matcher(strIn);
-            while (mInput.find()) {
-                mInput.appendReplacement(sbuf, "{" + (char)(mInput.group(1).charAt(0) - 1) + "}");
-            }
-            mInput.appendTail(sbuf);
-        }
-
-        return sbuf.toString();
-    }
-
     private void processNodeString(Node node, Map<String,String> resources) {
         String leftStr = node.getAttributes().getNamedItem("name").getNodeValue();
         String rightStr = node.getFirstChild().getNodeValue();
 
         resources.putIfAbsent(leftStr, rightStr);
-//        store(leftStr, rightStr, resources);
     }
 
     private void processNodePlural(Node node,  Map<String,String> resources) {
@@ -111,26 +63,6 @@ public class XmlToPlainParserSync {
             String rightStr = child.getFirstChild().getNodeValue();
 
             resources.putIfAbsent(leftStr, rightStr);
-//            store(leftStr, rightStr, resources);
-        }
-    }
-
-
-    private void store(String leftStr, String rightStr, Map<String,String> resources) {
-        boolean isDuplicate = null != resources.putIfAbsent(leftStr, rightStr);
-        if (isDuplicate) {
-            // entry with name leftStr appeared earlier. Ignore new value.
-            //  Write warning with some usefull info to console.
-            String oldRightStr = resources.get(leftStr);
-            if (oldRightStr.equals(rightStr)) {
-                System.out.println("!Duplication for entry: \"" + leftStr
-                        + "\"\t in file " + currentFileName);
-            } else {
-                System.out.println("WARNING! Different values for entry: \""
-                        + leftStr + "\"\n"
-                        + "\t version one: \"" + oldRightStr + "\"\n"
-                        + "\t version two: \"" + rightStr + "\"\t location: " + currentFileName);
-            }
         }
     }
 }

@@ -41,11 +41,11 @@ public class XmlToPlainTest {
         }
 
         // multithreaded version
-        String outFileNameMulty = "output/English_output_m.txt";
-        String logFileNameMulty = "output/log_m.txt";
+        String outFileNameMulti = "output/English_output_m.txt";
+        String logFileNameMulti = "output/log_m.txt";
         ExecutorService service = null;
-        try (PrintStream outStreamEng = new PrintStream(new FileOutputStream(outFileNameMulty, false));
-             PrintStream logFile = new PrintStream(new FileOutputStream(logFileNameMulty, false)))
+        try (PrintStream outStreamEng = new PrintStream(new FileOutputStream(outFileNameMulti, false));
+             PrintStream logFile = new PrintStream(new FileOutputStream(logFileNameMulti, false)))
         {
             XmlToPlainParserSync parser = new XmlToPlainParserSync();
             service = Executors.newFixedThreadPool(4);
@@ -74,7 +74,7 @@ public class XmlToPlainTest {
 
 
         Path toSingleResult = Paths.get(outFileName);
-        Path toMultiResult = Paths.get(outFileNameMulty);
+        Path toMultiResult = Paths.get(outFileNameMulti);
         List<String> singleList = Files.readAllLines(toSingleResult);
         List<String> multiList = Files.readAllLines(toMultiResult);
         singleList.sort(String::compareTo);

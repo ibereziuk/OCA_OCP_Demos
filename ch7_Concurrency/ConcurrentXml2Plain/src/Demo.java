@@ -4,12 +4,14 @@ import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
 
+import static java.lang.Integer.min;
+
 public class Demo {
     static String[] fileNamesEnglish = {
+            "res/values/strings2.xml",
             "res/values/ads.xml",
             "res/values/extra.xml",
-            "res/values/strings.xml",
-            "res/values/strings2.xml"};
+            "res/values/strings.xml"};
 
     static String[] fileNamesItalian = {
             "res/values-it/ads.xml",
@@ -22,8 +24,9 @@ public class Demo {
             System.out.println("run #" + i + ":");
 
             singleThreadRun();
-            multiThreadRun(1);
             multiThreadRun(4);
+            multiThreadRun(2);
+            multiThreadRun(1);
         }
     }
 
@@ -33,9 +36,10 @@ public class Demo {
         System.out.print("\t\t Single  \t");
         translateEnglishSingleThread();
 
-        long endTime = System.currentTimeMillis();
-
-        System.out.println("ms elapsed: " + (endTime - startTime));
+        long timeElapsed = System.currentTimeMillis() - startTime;
+        System.out.print("ms elapsed: " + timeElapsed + "\t");
+        printBar((int)timeElapsed / 10);
+        System.out.println();
     }
 
 
@@ -44,9 +48,10 @@ public class Demo {
         System.out.print("\t\t Multi " + nThreads + "\t");
         translateEnglishParalel(nThreads);
 
-        long endTime = System.currentTimeMillis();
-
-        System.out.println("ms elapsed: " + (endTime - startTime));
+        long timeElapsed = System.currentTimeMillis() - startTime;
+        System.out.print("ms elapsed: " + timeElapsed + "\t");
+        printBar(((int)timeElapsed + 5) / 10);
+        System.out.println();
     }
 
 
@@ -67,12 +72,14 @@ public class Demo {
 
     static void translateEnglishParalel(int nThreads) throws Exception {
         String[] inputFileNames = fileNamesEnglish;
-        String outFileNameMulty = "output/English_output_m.txt";
+        String outFileNameMulti = "output/English_output_m.txt";
         String logFileName = "output/log_m.txt";
+
         ExecutorService service = null;
-        try (PrintStream outStreamEng = new PrintStream(new FileOutputStream(outFileNameMulty, false));
-             PrintStream logFile = new PrintStream(new FileOutputStream(logFileName, false));) {
+        try (PrintStream outStreamEng = new PrintStream(new FileOutputStream(outFileNameMulti, false));
+             PrintStream logFile = new PrintStream(new FileOutputStream(logFileName, false))) {
             XmlToPlainParserSync parser = new XmlToPlainParserSync();
+
             service = Executors.newFixedThreadPool(nThreads);
 
             List<Callable<Map<String, String>>> tasks = new ArrayList<>();
@@ -96,5 +103,44 @@ public class Demo {
         finally {
             service.shutdown();
         }
+    }
+
+    static void printBar(int length) {
+        StringBuilder builder = new StringBuilder(length);
+
+        for (int i = 0; i < min(5,length); i++) {
+            builder.append(blue(" "));
+        }
+
+        for (int i = 0; i < min(5,length - 5); i++) {
+            builder.append(green(" "));
+        }
+
+        for (int i = 0; i < min(5,length - 10); i++) {
+            builder.append(yellow(" "));
+        }
+
+        for (int i = 0; i < length - 15; i++) {
+            builder.append(red(" "));
+        }
+
+        System.out.print(builder.toString());
+    }
+
+
+    static String green(String str){
+        return "\u001B[42m" + str + "\u001B[0m";
+    }
+
+    static String yellow(String str){
+        return "\u001B[43m" + str + "\u001B[0m";
+    }
+
+    static String red(String str){
+        return "\u001B[41m" + str + "\u001B[0m";
+    }
+
+    static String blue(String str){
+        return "\u001B[46m" + str + "\u001B[0m";
     }
 }

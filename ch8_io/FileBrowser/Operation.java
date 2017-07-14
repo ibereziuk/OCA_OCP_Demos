@@ -11,7 +11,7 @@ class Operation {
 	}
 	
 	public Operation(OpType type, List<String> args) {
-		this.type = type;
+		this(type);
 		this.args = args;
 	}
 	
@@ -25,12 +25,13 @@ class Operation {
 				showNested();
 				break;
 			case SHOW_CURRENT_PATH:
-				System.out.println(currentDir.getAbsolutePath());
+				System.out.println("\n" + currentDir.getAbsolutePath() + "\n");
 				break;
 			case MAKE_DIRECTORY:
 				createDirectory();
 				break;
 			case NAVIGATE_TO:
+				navigate();
 				break;
 			case IDLE:
 				break;
@@ -55,8 +56,32 @@ class Operation {
 	}
 	
 	private void createDirectory() {
+		if (args.isEmpty()) {
+			System.out.println("usage: mkdir <directory name>");
+			return;
+		}
+		
 		String newDirPath = currentDir.getAbsolutePath() + "\\" + args.get(0);
 		File newDir = new File(newDirPath);
 		newDir.mkdir();
 	}
+	
+	private void navigate() {
+		if (args.isEmpty()) {
+			return;
+		}
+		
+		if (args.get(0).equals("..")) {
+			currentDir = currentDir.getParentFile();
+		} else {
+			String destination = currentDir.getAbsolutePath() + "\\" + args.get(0);
+			File file = new File(destination);
+			if (file.isDirectory()) {
+				currentDir = file;
+			} else {
+				System.out.println(file.getAbsolutePath() + ": no such directory");
+			}
+		}
+	}
+	
 }

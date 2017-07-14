@@ -1,18 +1,33 @@
 import java.io.*;
 import java.nio.charset.*;
+import java.util.*;
 
 public class FileBrowser {
-	private Console console = System.console();
+	private static final Console console = System.console();
 	private File currentDir = null;
 	private CommandParser parser = null;
 	
 	public void run() {
-		init();		
-		while(readCommand());
+		greetings();
+		init();
+		
+		boolean cont = true;
+		while(cont) {
+			cont = readCommand();
+		}
+	}
+	
+	private static void greetings() {
+		StringJoiner joiner = new StringJoiner("\n");
+		joiner.add("******************************************");
+		joiner.add("**                                      **");
+		joiner.add("**        Welcome to John's shell       **");
+		joiner.add("**                                      **");
+		joiner.add("******************************************");
+		System.out.println(joiner.toString());
 	}
 	
 	private void init () {
-		// System.out.println("Working Directory = " + System.getProperty("user.dir"));			  
 		parser = new CommandParser();
 		currentDir = new File(System.getProperty("user.dir"));
 	}
@@ -25,12 +40,13 @@ public class FileBrowser {
 		op.currentDir = currentDir;
 		
 		boolean stayInCmd = op.execute();
+		currentDir = op.currentDir;
 		
 		return stayInCmd;
 	}
 
 	String readInput() {
-		return console.readLine("UserName:" + currentDir.getAbsolutePath() + " $")
+		return console.readLine("UserName:" + currentDir.getAbsolutePath() + "$ ")
 					.trim();
 	}	
 	

@@ -13,7 +13,6 @@ public class XmlToPlainParserSync {
         Map<String, String> resources = new HashMap<>();
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-
             DocumentBuilder db = dbf.newDocumentBuilder();
             Document dom = db.parse(filename);
             Element doc = dom.getDocumentElement();

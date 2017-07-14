@@ -3,21 +3,27 @@ package parser;
 
 import java.io.PrintStream;
 import java.util.Map;
+import java.util.StringJoiner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Translator {
     public static void translateAndWrite(Map<String,String> stringResourceMap,
                                          PrintStream outStream) {
+        StringJoiner joiner = new StringJoiner("\n");
+
         stringResourceMap.forEach((k,v) -> {
-            outStream.println(k + " = " + adaptText(v));
+            String entry = k + " = " + adaptText(v);
+            joiner.add(entry);
         });
+
+        outStream.print(joiner.toString());
     }
 
     private static String adaptText(String strIn) {
         String regex1 = "%d";
         String regex2 = "%(\\d)\\$\\w";
-        if (!strIn.matches(".*(" + regex1 + "|" + regex2 + ").*")) {
+        if (!strIn.matches(String.format(".*(%s|%s).*", regex1, regex2))) {
             return strIn;
         }
         // here I suppose that special combination "%d" and "%\d$\w" appear only

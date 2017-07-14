@@ -20,13 +20,15 @@ public class Demo {
             "res/values-it/strings2.xml"};
 
     public static void main(String[] args) throws Exception {
-        for (int i = 1; i <= 5; i++) {
+        for (int i = 1; i <= 3; i++) {
             System.out.println("run #" + i + ":");
 
-            singleThreadRun();
+//            singleThreadRun();
             multiThreadRun(4);
             multiThreadRun(2);
             multiThreadRun(1);
+            multiThreadRun(2);
+            multiThreadRun(4);
         }
     }
 
@@ -38,7 +40,7 @@ public class Demo {
 
         long timeElapsed = System.currentTimeMillis() - startTime;
         System.out.print("ms elapsed: " + timeElapsed + "\t");
-        printBar((int)timeElapsed / 10);
+        printBar((int)timeElapsed);
         System.out.println();
     }
 
@@ -50,7 +52,7 @@ public class Demo {
 
         long timeElapsed = System.currentTimeMillis() - startTime;
         System.out.print("ms elapsed: " + timeElapsed + "\t");
-        printBar(((int)timeElapsed + 5) / 10);
+        printBar((int)timeElapsed);
         System.out.println();
     }
 
@@ -106,21 +108,28 @@ public class Demo {
     }
 
     static void printBar(int length) {
+        int macroStep = 5;
+        length = Math.round(length / 10f);
+
         StringBuilder builder = new StringBuilder(length);
 
-        for (int i = 0; i < min(5,length); i++) {
+        int pixelLeft = length;
+        for (int i = 0; i < min(macroStep,pixelLeft); i++) {
             builder.append(blue(" "));
         }
 
-        for (int i = 0; i < min(5,length - 5); i++) {
+        pixelLeft -= macroStep;
+        for (int i = 0; i < min(macroStep,pixelLeft); i++) {
             builder.append(green(" "));
         }
 
-        for (int i = 0; i < min(5,length - 10); i++) {
+        pixelLeft -= macroStep;
+        for (int i = 0; i < min(macroStep,pixelLeft); i++) {
             builder.append(yellow(" "));
         }
 
-        for (int i = 0; i < length - 15; i++) {
+        pixelLeft -= macroStep;
+        for (int i = 0; i < pixelLeft; i++) {
             builder.append(red(" "));
         }
 

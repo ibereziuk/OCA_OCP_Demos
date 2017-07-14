@@ -88,6 +88,9 @@ public class XmlToPlainTest {
 //            }
 //        }
 
+        assert singleList.size() == multiList.size()
+                : "number of entries differs: " + singleList.size() + " != "  + multiList.size();
+
         assert singleList.equals(multiList)
                 : "singlethreaded and multithreaded outputs differ";
     }

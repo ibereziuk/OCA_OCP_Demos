@@ -30,3 +30,7 @@ chapter3/Play/
 chapter5_DateTime/PlayDateTime/
 chapter5_DateTime/Localization/
 chapter6_ExceptionsAssertions/
+ch7_Concurrency/Play/
+ch7_Concurrency/Volatile/
+ch7_Concurrency/ConcurrentXml2Plain/output/
+ch8_io/HelloFile/

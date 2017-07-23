@@ -78,8 +78,15 @@ public class Demo {
         String logFileName = "output/log_m.txt";
 
         ExecutorService service = null;
-        try (PrintStream outStreamEng = new PrintStream(new FileOutputStream(outFileNameMulti, false));
-             PrintStream logFile = new PrintStream(new FileOutputStream(logFileName, false))) {
+        try (PrintStream outStreamEng =
+                     new PrintStream(
+                             new BufferedOutputStream(
+                                     new FileOutputStream(outFileNameMulti, false)));
+             PrintStream logFile =
+                     new PrintStream(
+                             new BufferedOutputStream(
+                                     new FileOutputStream(logFileName, false))))
+        {
             XmlToPlainParserSync parser = new XmlToPlainParserSync();
 
             service = Executors.newFixedThreadPool(nThreads);

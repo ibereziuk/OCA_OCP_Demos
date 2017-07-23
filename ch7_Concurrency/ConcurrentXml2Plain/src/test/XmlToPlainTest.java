@@ -6,6 +6,7 @@ import parser.Translator;
 import parser.XmlToPlainParser;
 import parser.XmlToPlainParserSync;
 
+import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.nio.file.Files;
@@ -30,8 +31,14 @@ public class XmlToPlainTest {
         // single threaded version
         String outFileName = "output/English_output.txt";
         String logFileName = "output/log.txt";
-        try (PrintStream outStreamEng = new PrintStream(new FileOutputStream(outFileName, false));
-             PrintStream logFile = new PrintStream(new FileOutputStream(logFileName, false)))
+        try (PrintStream outStreamEng =
+                     new PrintStream(
+                             new BufferedOutputStream(
+                                     new FileOutputStream(outFileName, false)));
+             PrintStream logFile =
+                     new PrintStream(
+                             new BufferedOutputStream(
+                                     new FileOutputStream(logFileName, false))))
         {
             XmlToPlainParser parser = new XmlToPlainParser();
             for (String fileName : inputFileNames) {
